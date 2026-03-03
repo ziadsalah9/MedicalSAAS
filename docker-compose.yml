@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: video_consultant
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: video_consultantDB
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: video_consultant_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ziads5933@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: ziadsalah
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: video_consultant_tunnel
+    environment:
+      - NGROK_AUTHTOKEN=3AKkrmu1BGZ1ABEIH4msTV0dBMV_46c181fGbgRBZjE7S5JSG
+    command:
+      - "http"
+      - "host.docker.internal:8086"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "4040:4040"
