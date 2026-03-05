@@ -103,33 +103,35 @@ public class paymobCallBackController {
 
 
     @GetMapping(produces = MediaType.TEXT_HTML_VALUE)
-    public String showSuccessPageToUser() {
-        System.out.println("🌐 [Redirect] المريض رجع للمتصفح الآن.");
+    public String showResponsePageToUser(@RequestParam Map<String, String> allParams) {
+        // Paymob بيبعت كلمة "true" أو "false" في الـ URL parameter اللي اسمه success
+        String successStatus = allParams.get("success");
+        boolean isSuccess = "true".equalsIgnoreCase(successStatus);
 
-        return """
-                <html>
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>نجاح الدفع</title>
-                    <style>
-                        body { font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f4f7f6; }
-                        .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; max-width: 400px; }
-                        h1 { color: #2ecc71; margin-bottom: 10px; }
-                        p { color: #666; font-size: 16px; line-height: 1.5; }
-                        .check-icon { font-size: 50px; color: #2ecc71; margin-bottom: 20px; }
-                    </style>
-                </head>
-                <body>
-                    <div class="card">
-                        <div class="check-icon">✔</div>
-                        <h1>تمت العملية بنجاح!</h1>
-                        <p>تم شحن رصيد محفظتك بنجاح. يمكنك الآن العودة للتطبيق ومتابعة استشاراتك الطبية.</p>
-                        <p style="font-size: 12px; color: #aaa; margin-top: 20px;">يمكنك إغلاق هذه الصفحة الآن.</p>
-                    </div>
-                </body>
-                </html>
-                """;
+        if (isSuccess) {
+            return """
+            <html>
+            <body style="font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; background: #f4f7f6;">
+                <div style="background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                    <h1 style="color: #2ecc71;">✔ تمت العملية بنجاح!</h1>
+                    <p>تم شحن رصيد محفظتك. يمكنك العودة للتطبيق الآن.</p>
+                </div>
+            </body>
+            </html>
+            """;
+        } else {
+            return """
+            <html>
+            <body style="font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; background: #fff5f5;">
+                <div style="background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                    <h1 style="color: #e74c3c;">❌ فشلت العملية</h1>
+                    <p>عذراً، لم يتم إتمام الدفع. يرجى التأكد من بيانات المحفظة والمحاولة مرة أخرى.</p>
+                    <a href="javascript:history.back()" style="color: #3498db;">العودة للمحاولة</a>
+                </div>
+            </body>
+            </html>
+            """;
+        }
     }
 }
 
