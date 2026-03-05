@@ -1,5 +1,6 @@
 package com.MidecalApp.VideoConsultatntAppDemo.video.service;
 
+import com.MidecalApp.VideoConsultatntAppDemo.patient.wallet.service.walletService;
 import com.MidecalApp.VideoConsultatntAppDemo.video.Entity.VideoSession;
 import com.MidecalApp.VideoConsultatntAppDemo.video.Enums.videoSessionStatus;
 import com.MidecalApp.VideoConsultatntAppDemo.appointment.repository.appointmentRepository;
@@ -30,10 +31,12 @@ public class videoService {
 
     private final videoRepository videoRepository;
     private final appointmentRepository appointmentRepository;
+    private final walletService _walletService;
     public long CreateSession(long appointmentID){
 
         var appointment = appointmentRepository.findById(appointmentID)
                 .orElseThrow();
+        _walletService.holdAmount(appointment);
         String roomName = "room_"+ UUID.randomUUID().toString();
         VideoSession videoSession = VideoSession.builder()
                 .roomName(roomName)

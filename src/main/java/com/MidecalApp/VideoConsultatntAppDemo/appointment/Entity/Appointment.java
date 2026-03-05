@@ -38,6 +38,7 @@ public class Appointment {
     private long actualDurationSeconds;
 
     private Double price;
+    private Double heldAmount;  // المبلغ المحجوز
     private Double finalAmount;
 
     private LocalDateTime   createdAt;

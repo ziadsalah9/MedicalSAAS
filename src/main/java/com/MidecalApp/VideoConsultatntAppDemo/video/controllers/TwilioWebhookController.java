@@ -27,11 +27,11 @@ public class TwilioWebhookController {
     TwilioWebhookController(videoCallWebhookService videoCallWebhookService) {
         _videoCallWebhookService = videoCallWebhookService;
     }
-    @PostMapping("/{doctorId}")
+    @PostMapping
 
-    public ResponseEntity<String> createWebhook(@PathVariable long doctorId,@RequestParam Map<String,String> body) {
+    public ResponseEntity<String> createWebhook(@RequestParam Map<String,String> body) {
 
-       _videoCallWebhookService.handleTwilioEvent(doctorId,body);
+       _videoCallWebhookService.handleTwilioEvent(body);
 
 
         body.forEach((k,v) -> System.out.println(k + " = " + v));

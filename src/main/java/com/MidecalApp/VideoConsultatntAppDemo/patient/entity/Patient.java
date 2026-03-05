@@ -37,6 +37,7 @@ public class Patient {
     private String country;
 
 
+    @Column(nullable = false)
     private Double WalletBalance =0.0;
 
     private LocalDateTime createdAt;
