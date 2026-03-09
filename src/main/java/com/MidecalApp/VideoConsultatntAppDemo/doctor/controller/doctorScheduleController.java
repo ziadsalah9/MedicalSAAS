@@ -1,13 +1,16 @@
 package com.MidecalApp.VideoConsultatntAppDemo.doctor.controller;
 
+import com.MidecalApp.VideoConsultatntAppDemo.appointment.Entity.TimeSlot;
 import com.MidecalApp.VideoConsultatntAppDemo.doctor.entity.DoctorAvailability;
 import com.MidecalApp.VideoConsultatntAppDemo.doctor.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.MidecalApp.VideoConsultatntAppDemo.appointment.service.slotService;
     import com.MidecalApp.VideoConsultatntAppDemo.doctor.dto.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/doctor/schedule")
@@ -45,6 +48,14 @@ public class doctorScheduleController {
         return ResponseEntity.ok("Slots generated successfully for " + date);
     }
 
+
+    @GetMapping("/available-slots")
+    public ResponseEntity<List<TimeSlot>> getAvailableSlots(
+            @RequestParam long doctorId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        return ResponseEntity.ok(_slotService.findAvailableSlotsForDoctor(doctorId, date));
+    }
 
 }
 

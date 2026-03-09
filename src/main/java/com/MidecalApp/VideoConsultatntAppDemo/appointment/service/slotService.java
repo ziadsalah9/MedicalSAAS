@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -66,6 +68,31 @@ public class slotService {
     }
 
 
+
+
+    //search all isBooked for specific doctor
+
+    public List<TimeSlot>  findAvailableSlotsForDoctor(long doctorId, LocalDate date)
+    {
+
+        LocalDateTime startDay = date.atStartOfDay();
+        LocalDateTime endDay = date.atTime(LocalTime.MAX);
+
+        System.out.println("startDay: " + startDay +"-----" +  " endDay: " + endDay);
+
+        return _timeSlotRepository.findAvailableSlot(doctorId, startDay, endDay);
+
+    }
+
+
+
+
+
+
+
+
+
+
     public TimeSlot findSlotById(long slotId) {
 
         var result = _timeSlotRepository.findById(slotId).orElseThrow(()->
@@ -79,4 +106,7 @@ public class slotService {
 
         _timeSlotRepository.save(timeSlot);
     }
+
+
+
 }
