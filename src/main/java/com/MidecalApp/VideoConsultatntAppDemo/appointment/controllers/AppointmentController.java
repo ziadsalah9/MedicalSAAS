@@ -3,6 +3,7 @@ package com.MidecalApp.VideoConsultatntAppDemo.appointment.controllers;
 
 import com.MidecalApp.VideoConsultatntAppDemo.appointment.Dtos.appointmentRequestDto;
 import com.MidecalApp.VideoConsultatntAppDemo.appointment.service.appointmentService;
+import com.MidecalApp.VideoConsultatntAppDemo.video.Enums.sessionType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,5 +44,16 @@ public class AppointmentController {
         }
         return ResponseEntity.notFound().build();
 
+    }
+
+    @PostMapping("/book")
+    public ResponseEntity<Long> bookSlot(@RequestParam long slotId, @RequestParam long patientId ,
+                                         @RequestParam sessionType type
+                                         ){
+
+
+       long id =  _appointmentService.bookSlot(slotId,patientId,type);
+
+       return ResponseEntity.ok(id);
     }
 }

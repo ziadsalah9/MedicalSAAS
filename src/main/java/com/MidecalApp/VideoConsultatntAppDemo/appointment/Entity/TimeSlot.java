@@ -1,6 +1,7 @@
 package com.MidecalApp.VideoConsultatntAppDemo.appointment.Entity;
 
 import com.MidecalApp.VideoConsultatntAppDemo.doctor.entity.Doctor;
+import com.MidecalApp.VideoConsultatntAppDemo.doctor.entity.DoctorAvailability;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +20,7 @@ public class TimeSlot {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "doctor_id")
@@ -30,6 +31,10 @@ public class TimeSlot {
     private LocalDateTime endDateTime;
 
     private boolean isBooked=false;  // هل الموعد ده اتحجز خلاص؟
+
+    @ManyToOne
+    @JoinColumn(name = "availability_id")
+    private DoctorAvailability availability;
 
 
 }

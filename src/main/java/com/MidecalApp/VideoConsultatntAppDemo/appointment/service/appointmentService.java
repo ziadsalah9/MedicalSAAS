@@ -9,13 +9,15 @@ import com.MidecalApp.VideoConsultatntAppDemo.doctor.service.doctorService;
 import com.MidecalApp.VideoConsultatntAppDemo.patient.Dto.patientResponseDto;
 import com.MidecalApp.VideoConsultatntAppDemo.doctor.dto.*;
 import com.MidecalApp.VideoConsultatntAppDemo.patient.service.patientService;
+import com.MidecalApp.VideoConsultatntAppDemo.video.Enums.sessionType;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+import com.MidecalApp.VideoConsultatntAppDemo.appointment.service.*;
 @Service
 @RequiredArgsConstructor
 public class appointmentService
@@ -26,6 +28,7 @@ public class appointmentService
 
     private final patientService _patientService;
     private final doctorService _doctorService;
+    private final slotService _timeSlotService;
     public long CreateService (appointmentRequestDto dto){
 
 //
@@ -165,8 +168,51 @@ public class appointmentService
 
 
 
-    // get all appointments by doctor id , by doctor name
 
-    // adding doctor , patiententity
+
+
+
+    @Transactional
+    public long bookSlot(long slotId, long patientId, sessionType type){
+
+       var slot= _timeSlotService.findSlotById(slotId);
+        var patient = _patientService.findPatientById(patientId);
+
+        if(slot.isBooked()){
+
+            throw new RuntimeException("some one booked this time. choose other slot!! ");
+        }
+
+        slot.setBooked(true);
+        _timeSlotService.save(slot);
+
+        double doctorRate = slot.getDoctor().getRatePerMinute();
+        double estimatedPrice;
+
+        var expectedTimeForSession = slot.getAvailability().getSlotDurationMinutes() ; // time of video that you expect
+        var doctorPriceForCheckPatient=slot.getAvailability().getClinicPrice();
+        if (type == sessionType.VIDEO) {
+            estimatedPrice = doctorRate * expectedTimeForSession;
+        } else {
+            estimatedPrice = doctorPriceForCheckPatient;
+        }
+
+        var appointment = Appointment.builder()
+                .patient(patient)
+                .doctor(slot.getDoctor())
+                .timeSlot(slot)
+                .scheduledAt(slot.getStartDateTime())
+                .status(sessionStatus.SCHEDULED)
+                .type(type)
+                .expectedDurationMinutes(expectedTimeForSession)
+                .heldAmount(estimatedPrice)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+
+        var result = _appointmentRepository.save(appointment);
+
+        return result.getId();
+    }
 
 }

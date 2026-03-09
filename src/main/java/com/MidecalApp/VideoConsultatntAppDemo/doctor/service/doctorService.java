@@ -116,6 +116,7 @@ public class doctorService {
                 .endTime(RequestDto.endTime())
                 .dayOfWeek(RequestDto.dayOfWeek())
                 .slotDurationMinutes(RequestDto.slotDurationMinutes())
+                .clinicPrice(RequestDto.clinicPrice())
                 .build();
         _doctorAvailabilityRepository.save(doctorAvailability);
      return doctorAvailability.getId();   
@@ -149,6 +150,7 @@ public class doctorService {
                     .startTime(item.getStartTime())
                     .endTime(item.getEndTime())
                     .slotDurationMinutes(item.getSlotDurationMinutes())
+                    .clinicPrice(item.getClinicPrice())
                     .doctorResponeDto(doctorResponseDto)
                 .build();
             responseDtoList.add(dto);

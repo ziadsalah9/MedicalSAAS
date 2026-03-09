@@ -18,6 +18,7 @@ public record doctorAvailbilityResponseDto(
 
         int slotDurationMinutes
         ,
+         Double clinicPrice,// سعر الكشف في العيادة لليوم ده
         doctorResponeDto doctorResponeDto
 
 ) {

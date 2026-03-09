@@ -57,6 +57,7 @@ public class slotService {
                 .startDateTime(startSlot)
                 .endDateTime(endSlot)
                 .isBooked(false)
+                .availability(availability)
                 .build();
 
         _timeSlotRepository.save(timeSlot);
@@ -65,4 +66,17 @@ public class slotService {
     }
 
 
+    public TimeSlot findSlotById(long slotId) {
+
+        var result = _timeSlotRepository.findById(slotId).orElseThrow(()->
+                new RuntimeException(" this time is not exists with id "+slotId));
+        return result;
+
+
+    }
+
+    public void save(TimeSlot timeSlot) {
+
+        _timeSlotRepository.save(timeSlot);
+    }
 }

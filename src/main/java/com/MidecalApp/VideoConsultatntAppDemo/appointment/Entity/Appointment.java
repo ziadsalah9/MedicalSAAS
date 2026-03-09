@@ -52,4 +52,7 @@ public class Appointment {
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 
+    @OneToOne
+    private TimeSlot timeSlot;
+
 }

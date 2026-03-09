@@ -36,4 +36,5 @@ public class DoctorAvailability {
     private LocalTime endTime;
 
     private int slotDurationMinutes; // مدة الكشف (مثلاً 30 دقيقة)
+    private Double clinicPrice; // سعر الكشف في العيادة لليوم ده
 }
